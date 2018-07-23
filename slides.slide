@@ -99,13 +99,13 @@ Now that we have a TCP listener object, we can accept client connections →
 
 * TCP RPC Server III
 
-In the main function of the server, using the TCP setup in the prior, accept and serve RPC requests.
+In the main function of the server, accept and serve RPC requests.
 
 .code ./server/server.go /START 4 OMIT/,/END 4 OMIT/
 
 - The listener.Accept() method blocks waiting for a client connection.
 - Once a connection is available, it is passed to the RPC ServeConn() method.
-- ServeConn forwards the RPC method and data to the correct function and responds. 
+- ServeConn forwards the RPC method/data to the correct function and responds. 
 - ServeConn then blocks until the client disconnects.
 
 

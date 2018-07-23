@@ -47,7 +47,6 @@ func main() {
 		if err != nil {
 			log.Println("listener accept error:", err)
 		}
-
 		// print connection info
 		fmt.Println("received message", reflect.TypeOf(conn), &conn)
 
