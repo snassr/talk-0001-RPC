@@ -1,0 +1,141 @@
+Executing Functions Across a Network with RPC
+Golang Boston Talk
+31 Jul 2018
+Tags: foo, bar, baz
+
+Samer Abunasser
+Software Engineer, Autodaas
+@snassr_
+https://snassr.io
+
+
+
+* Background
+
+*History*
+
+- 1960s - Response-Request protocols in early distributed computing theory.
+- 1970s - Theoretical proposals of remote procedure calls.
+- 1980s - Bruce Jay Nelson coins the term _remote_ _procedure_ _call_ and publishes an implementation along with Andrew Birrel called Lupine.
+
+
+
+* RPC
+
+Remote Procedure Call (RPC): The execution of a procedure or function in a different address space (over a network).
+
+- Custom Semantics: _CreateContainer_, _StartContainer_, _StopContainer_...
+- Protocol agnostic (UDP, TCP, HTTP...)
+- Allow services to play more than a single role of either client or server.
+
+.image images/GopherRPC_Say.JPG 330 750
+
+
+
+* RPC Uses
+
+- Intermediary services (Microservice Architectures)
+- Distributed systems with significant and complex actions (e.g. Database and Container Orchestration Systems)
+- Functions-As-A-Service (e.g. Serverless)
+
+: Node coordination, consensus and state validation can be implemented via RPC communication.
+: Common to use a fan-out pattern to broadcast an RPC to more than one instance or node.
+
+
+
+* Go and the standard RPC package
+
+*RPC* *Function* *Requirements*
+
+- Must be a receiver method on a struct object.
+- Must be exported (Capitalized).
+- Must have two arguments; First a pointer to a variable that will hold send data. Second, a pointer to a variable that will hold the received data.
+- Must have a return value of type error.
+- Can only communicate with other Go Servers (Gob serialization).
+
+.code ./noderpc/noderpc.go /START 0 OMIT/,/END 0 OMIT/
+
+
+
+* RPC Example - The RPC type and methods
+
+- Node object with actions (receiver methods) _Say_ and _Square_
+
+.code ./noderpc/noderpc.go /START 1 OMIT/,/END 1 OMIT/
+
+: Any server can import the package and serve the RPC functions.
+
+
+
+* TCP RPC Server I
+
+Import the rpc package and register the RPC object.
+
+- Import Go standard library rpc package.
+
+.code ./server/server.go /START 0 OMIT/,/END 0 OMIT/
+
+- In main, register the RPC object to publish the object's receiver methods to the server for client calls.
+
+.code ./server/server.go /START 1 OMIT/,/END 1 OMIT/
+
+
+
+* TCP RPC Server II
+
+In the main function of the server, we need to register the RPC and set it up over TCP.
+
+- Create a TCP Address.
+
+.code ./server/server.go /START 2 OMIT/,/END 2 OMIT/
+
+- Create a TCP Network listener.
+
+.code ./server/server.go /START 3 OMIT/,/END 3 OMIT/
+
+Now that we have a TCP listener object, we can accept client connections →
+
+
+
+* TCP RPC Server III
+
+In the main function of the server, using the TCP setup in the prior, accept and serve RPC requests.
+
+.code ./server/server.go /START 4 OMIT/,/END 4 OMIT/
+
+- The listener.Accept() method blocks waiting for a client connection.
+- Once a connection is available, it is passed to the RPC ServeConn() method.
+- ServeConn forwards the RPC method and data to the correct function and responds. 
+- ServeConn then blocks until the client disconnects.
+
+
+
+* TCP RPC Client I
+In the main function of a client, we import the rpc package and dial the RPC server over TCP.
+
+.code ./client/client.go /START 0 OMIT/,/END 0 OMIT/
+
+- Dial the RPC server and create a client connection.
+
+.code ./client/client.go /START 1 OMIT/,/END 1 OMIT/
+
+
+
+* TCP RPC Client II
+In the main function of the client, we call and RPC method and print the response.
+
+- The client.Call method takes a serviceMethod, data argument and a reply variable.
+
+.code ./client/client.go /START 2 OMIT/,/END 2 OMIT/
+
+- The server then processes the data on the requested method and sends back the reply and an error (if any).
+
+: serviceMethod: `ObjectName.Method` = Node.Say
+: data is of type interface{} but we must pass the correct type required by the args in the method.
+: finally a reference to variable that matches the reply data type of the method.
+
+
+
+* Demo
+
+.image images/GopherRPC_Square.JPG 330 750
