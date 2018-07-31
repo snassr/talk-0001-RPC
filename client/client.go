@@ -13,7 +13,7 @@ import (
 // START 1 OMIT
 func main() {
 	// connect to remote server via rpc tcp
-	client, err := rpc.Dial("tcp", ":"+"1200")
+	client, err := rpc.Dial("tcp", ":1200")
 	defer client.Close()
 	if err != nil {
 		log.Fatal(err)

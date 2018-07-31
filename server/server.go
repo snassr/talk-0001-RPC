@@ -48,7 +48,7 @@ func main() {
 			log.Println("listener accept error:", err)
 		}
 		// print connection info
-		fmt.Println("received message", reflect.TypeOf(conn), &conn)
+		fmt.Println("received connection", reflect.TypeOf(conn), &conn)
 
 		// handle client connections via rpc
 		rpc.ServeConn(conn)

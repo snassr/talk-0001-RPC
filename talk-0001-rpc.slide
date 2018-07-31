@@ -28,7 +28,7 @@ Remote Procedure Call (RPC): The execution of a procedure or function in a diffe
 - Protocol agnostic (UDP, TCP, HTTP...)
 - Allow services to play more than a single role of either client or server.
 
-.image images/GopherRPC_Say.JPG 330 750
+.image images/GopherRPC_SayMethod.jpg 340 740
 
 
 
@@ -56,10 +56,16 @@ Remote Procedure Call (RPC): The execution of a procedure or function in a diffe
 .code ./noderpc/noderpc.go /START 0 OMIT/,/END 0 OMIT/
 
 
+* RPC Example - a client and server
+- Node RPC package (a noderpc package with a struct and its RPC methods)
+- Server (setup RPC server and register the RPC object)
+- Client (setup a RPC client, and call RPC object methods, and display responses)
 
-* RPC Example - The RPC type and methods
 
-- Node object with actions (receiver methods) _Say_ and _Square_
+
+* Node RPC example package
+
+- Node struct with methods (receiver methods) for the actions _Say_ and _Square_
 
 .code ./noderpc/noderpc.go /START 1 OMIT/,/END 1 OMIT/
 
@@ -83,7 +89,7 @@ Import the rpc package and register the RPC object.
 
 * TCP RPC Server II
 
-In the main function of the server, we need to register the RPC and set it up over TCP.
+In the main function of the server, we setup a TCP network listener.
 
 - Create a TCP Address.
 
@@ -99,7 +105,7 @@ Now that we have a TCP listener object, we can accept client connections →
 
 * TCP RPC Server III
 
-In the main function of the server, accept and serve RPC requests.
+Still in the main function of the server, accept and serve RPC requests.
 
 .code ./server/server.go /START 4 OMIT/,/END 4 OMIT/
 
@@ -122,7 +128,7 @@ In the main function of a client, we import the rpc package and dial the RPC ser
 
 
 * TCP RPC Client II
-In the main function of the client, we call and RPC method and print the response.
+Still in the main function of the client, we call and RPC method and print the response.
 
 - The client.Call method takes a serviceMethod, data argument and a reply variable.
 
@@ -137,5 +143,16 @@ In the main function of the client, we call and RPC method and print the respons
 
 
 * Demo
+.image images/GopherRPC_SquareMethod.jpg 370 850
 
-.image images/GopherRPC_Square.JPG 330 750
+
+
+* About
+Slides:
+.link http://talks.snassr.io/talk-0001-rpc.slide
+
+Blog:
+.link https://snassr.io
+
+Twitter:
+.link @snassr_

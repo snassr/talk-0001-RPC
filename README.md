@@ -20,3 +20,12 @@ cd $GOPATH/src/github.com/snassr/talk-0001-RPC/server && go run server.go
 # run client
 cd $GOPATH/src/github.com/snassr/talk-0001-RPC/client && go run client.go
 ```
+#### Deploy Presentation
+```bash
+# find and kill existing process
+sudo kill -9 $(lsof -t -i:80)
+# go to directory
+cd $GOPATH/src/github.com/snassr/talk-0001-RPC/
+# run in background
+nohup present -http ":80" -play=false &
+```
