@@ -8,7 +8,7 @@ import (
 	"net/rpc" // rpc standard lib package
 	"reflect"
 
-	"github.com/snassr/talk-0001-RPC/noderpc"
+	"github.com/snassr/talk-0001-rpc/noderpc"
 )
 
 // END 0 OMIT
